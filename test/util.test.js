@@ -6,7 +6,7 @@ const { toPalette, toBase64 } = require("../src/util");
 
 const expect = chai.expect;
 
-describe("toBae64 utility function", () => {
+describe("toBase64 utility function", () => {
   it("should return a properly formatted Base64 image string", () => {
     const expected = "data:image/jpeg;base64,hello world";
     let mockedMimeType = "image/jpeg";
