@@ -1,40 +1,57 @@
 {
-  "name": "lqip",
-  "version": "2.1.0",
+  "name": "@mole-inc/lqip",
+  "version": "3.0.0",
   "description": "Low Quality Image Placeholders (LQIP) Module for Node",
-  "main": "index.js",
+  "main": "src/index.js",
+  "files": [
+    "src"
+  ],
   "scripts": {
-    "test": "mocha"
+    "test": "nyc --reporter=lcov mocha --timeout=3000",
+    "coverage": "codecov",
+    "lint": "eslint --ext .js --ignore-path .gitignore .",
+    "lint:fix": "eslint --fix --ext .js --ignore-path .gitignore .",
+    "release": "standard-version"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/zouhir/lqip.git"
+    "url": "git+https://github.com/mole-inc/lqip.git"
   },
   "keywords": [
     "lqip",
-    "cli",
     "node",
-    "nodecli",
     "images",
     "blur",
-    "blurry",
-    "webpack"
+    "blurry"
   ],
   "author": "Zouhir Chahoud",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/zouhir/lqip/issues"
+    "url": "https://github.com/mole-inc/lqip/issues"
   },
-  "homepage": "https://github.com/zouhir/lqip#readme",
+  "homepage": "https://github.com/mole-inc/lqip#readme",
   "dependencies": {
-    "jimp": "^0.2.28",
-    "lodash.sortby": "^4.7.0",
-    "node-vibrant": "^3.0.0-alpha.2"
+    "@jimp/custom": "^0.3.7",
+    "@jimp/jpeg": "^0.3.7",
+    "@jimp/plugin-resize": "^0.3.7",
+    "@jimp/png": "^0.3.7",
+    "node-vibrant": "^3.1.5"
   },
   "devDependencies": {
+    "@commitlint/cli": "^8.3.5",
+    "@commitlint/config-conventional": "^8.3.4",
     "chai": "^4.0.2",
-    "chai-as-promised": "^7.0.0",
-    "mocha": "^3.4.2",
-    "mock-fs": "^4.4.1"
+    "chai-as-promised": "^7.1.1",
+    "codecov": "^3.6.5",
+    "eslint": "^6.8.0",
+    "eslint-config-prettier": "^6.10.1",
+    "eslint-plugin-prettier": "^3.1.2",
+    "mocha": "^7.1.1",
+    "nyc": "^15.0.0",
+    "prettier": "^2.0.2",
+    "standard-version": "^7.1.0"
+  },
+  "engines": {
+    "node": ">=10.13.0"
   }
 }
