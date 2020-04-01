@@ -31,16 +31,16 @@
   },
   "homepage": "https://github.com/mole-inc/lqip#readme",
   "dependencies": {
-    "@jimp/custom": "^0.3.7",
-    "@jimp/jpeg": "^0.3.7",
-    "@jimp/plugin-resize": "^0.3.7",
-    "@jimp/png": "^0.3.7",
+    "@jimp/custom": "^0.10.0",
+    "@jimp/jpeg": "^0.10.0",
+    "@jimp/plugin-resize": "^0.10.0",
+    "@jimp/png": "^0.10.0",
     "node-vibrant": "^3.1.5"
   },
   "devDependencies": {
     "@commitlint/cli": "^8.3.5",
     "@commitlint/config-conventional": "^8.3.4",
-    "chai": "^4.0.2",
+    "chai": "^4.2.0",
     "chai-as-promised": "^7.1.1",
     "codecov": "^3.6.5",
     "eslint": "^6.8.0",
