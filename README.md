@@ -2,6 +2,11 @@
 
 # LQIP: Low Quality Images Placeholder
 
+[![Downloads](https://badgen.net/npm/dm/@mole-inc/lqip)](https://www.npmjs.com/package/@mole-inc/lqip)
+[![Version](https://badgen.net/npm/v/@mole-inc/lqip)](https://www.npmjs.com/package/@mole-inc/lqip)
+[![License](https://badgen.net/npm/license/@mole-inc/lqip)](https://www.npmjs.com/package/@mole-inc/lqip)
+[![codecov](https://codecov.io/gh/mole-inc/lqip/branch/master/graph/badge.svg)](https://codecov.io/gh/mole-inc/lqip)
+
 ## Installation
 
 ```
