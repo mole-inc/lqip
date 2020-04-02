@@ -10,7 +10,7 @@
 ## Installation
 
 ```
-npm install lqip
+npm install @mole-inc/lqip
 ```
 
 ## Usage Example
