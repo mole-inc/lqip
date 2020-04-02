@@ -10,7 +10,7 @@
 ## Installation
 
 ```
-npm install --save lqip
+npm install lqip
 ```
 
 ## Usage Example
@@ -30,10 +30,12 @@ lqip.base64(file).then(res => {
 
 ## API Documentation
 
-#### `lqip.base64(filePath: string)`
+#### `lqip.base64(source: string | Buffer, forceJimp: boolean)`
 
-This method accepts an image file path, the file has to be one of those formats ['jpeg', 'jpg', 'png'] and returns a Base64 
+This method accepts an image file path and Buffer, the file has to be one of those formats ['jpeg', 'jpg', 'png'] and returns a Base64. 
 image string with a valid format and ready to be used in web applications such as in <img /> tags source or in CSS properties URLs. 
+
+forceJimp is `false` as default. When this is a falsy, use [sharp](https://sharp.pixelplumbing.com/) if installed.
 
 ## Inspired by
 

@@ -3,7 +3,6 @@
     "module": "ESNext",
     "target": "ES2015",
     "lib": [
-      "DOM",
       "ES2016",
       "ES2017",
       "ES2018",

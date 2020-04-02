@@ -13,10 +13,13 @@ const SUPPORTED_MIMES: Record<string, string> = {
   png: "image/png",
 };
 
-const base64 = async (file: string | Buffer): Promise<string> => {
-  if (isInstalled("sharp")) {
+const base64 = async (
+  source: string | Buffer,
+  forceJimp = false
+): Promise<string> => {
+  if (!forceJimp && isInstalled("sharp")) {
     const sharp = (await import("sharp")).default;
-    const pipe = sharp(file);
+    const pipe = sharp(source);
     const format =
       (
         await pipe.metadata().catch(() => {
@@ -40,9 +43,9 @@ const base64 = async (file: string | Buffer): Promise<string> => {
     types: [jpeg, png],
     plugins: [resize],
   });
-  if (typeof file === "string") {
+  if (typeof source === "string") {
     // get the extension of the chosen file
-    const extension = path.extname(file).split(".").pop() || "";
+    const extension = path.extname(source).split(".").pop() || "";
     // supported files for now are ['jpg', 'jpeg', 'png']
     if (!SUPPORTED_MIMES[extension]) {
       throw new Error(
@@ -50,7 +53,7 @@ const base64 = async (file: string | Buffer): Promise<string> => {
       );
     }
     return jimp
-      .read(file)
+      .read(source)
       .then((image) => image.resize(10, jimp.AUTO))
       .then(async (image) => {
         const data = await image.getBufferAsync(
@@ -61,7 +64,7 @@ const base64 = async (file: string | Buffer): Promise<string> => {
       });
   }
   return jimp
-    .read(file)
+    .read(source)
     .then((image) => image.resize(10, jimp.AUTO))
     .then(async (image) => {
       const data = await image.getBufferAsync(
