@@ -1,13 +1,10 @@
 import path from "path";
-import Vibrant from "node-vibrant";
 import configure from "@jimp/custom";
 import jpeg from "@jimp/jpeg";
 import png from "@jimp/png";
 import resize from "@jimp/plugin-resize";
-import { ImageSource } from "node-vibrant/lib/typing";
 
-import { toPalette, toBase64, isInstalled } from "./util";
-import { SharpImage } from "./SharpImage";
+import { toBase64, isInstalled } from "./util";
 
 // supported images aka mimetypes
 const SUPPORTED_MIMES: Record<string, string> = {
@@ -33,13 +30,10 @@ const base64 = async (file: string | Buffer): Promise<string> => {
         "Input file is missing or of an unsupported image format lqip"
       );
     }
-    pipe
+    return pipe
       .resize(14) // resize to 14px width and auto height
       .toBuffer() // converts to buffer for Base64 conversion
-      .then((data) => {
-        // valid image Base64 string, ready to go as src or CSS background
-        return toBase64(SUPPORTED_MIMES[format], data);
-      });
+      .then((data) => toBase64(SUPPORTED_MIMES[format], data));
   }
 
   const jimp = configure({
@@ -78,18 +72,4 @@ const base64 = async (file: string | Buffer): Promise<string> => {
     });
 };
 
-const palette = async (file: ImageSource): Promise<string[]> => {
-  if (isInstalled("sharp")) {
-    const vibrant = new Vibrant(file, {
-      ImageClass: SharpImage,
-    });
-    return vibrant.getPalette().then((palette) => toPalette(palette));
-  }
-  const vibrant = new Vibrant(file);
-  return vibrant.getPalette().then((palette) => toPalette(palette));
-};
-
-export default {
-  base64,
-  palette,
-};
+export default { base64 };

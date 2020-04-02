@@ -9,16 +9,8 @@ describe("lqip base64 function", () => {
 
   it("should generate a valid base64", () => {
     const file = `${__dirname}/img/riding-a-bike.jpg`;
-    const expectedBase64 = "data:image/jpeg;base64,/9j/";
+    const expectedBase64 = "data:image/jpeg;base64,/9j/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhY";
     const lqipped = lqip.base64(file);
     return expect(lqipped).resolves.toContain(expectedBase64);
-  });
-});
-
-describe("lqip palette function", () => {
-  it("should generate a color palette", () => {
-    const file = `${__dirname}/img/riding-a-bike.jpg`;
-    const lqipped = lqip.palette(file);
-    return expect(lqipped).resolves.toHaveLength(6);
   });
 });
