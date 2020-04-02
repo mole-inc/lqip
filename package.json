@@ -2,15 +2,21 @@
   "name": "@mole-inc/lqip",
   "version": "3.1.1",
   "description": "Low Quality Image Placeholders (LQIP) Module for Node",
-  "main": "src/index.js",
+  "main": "lib/index.js",
+  "module": "lib/index.mjs",
+  "browser": "lib/index.umd.js",
+  "type": "commonjs",
+  "types": "lib/index.d.ts",
   "files": [
-    "src"
+    "lib"
   ],
   "scripts": {
+    "build": "rollup -c",
+    "dev": "rollup -c -w",
     "test": "nyc --reporter=lcov mocha --timeout=3000",
     "coverage": "codecov",
-    "lint": "eslint --ext .js --ignore-path .gitignore .",
-    "lint:fix": "eslint --fix --ext .js --ignore-path .gitignore .",
+    "lint": "eslint --ext .js,.ts --ignore-path .gitignore .",
+    "lint:fix": "eslint --fix --ext .js,.ts --ignore-path .gitignore .",
     "release": "standard-version"
   },
   "repository": {
@@ -40,6 +46,13 @@
   "devDependencies": {
     "@commitlint/cli": "^8.3.5",
     "@commitlint/config-conventional": "^8.3.4",
+    "@rollup/plugin-commonjs": "^11.0.2",
+    "@rollup/plugin-json": "^4.0.2",
+    "@rollup/plugin-node-resolve": "^7.1.1",
+    "@types/node": "10",
+    "@types/sharp": "^0.24.0",
+    "@typescript-eslint/eslint-plugin": "^2.26.0",
+    "@typescript-eslint/parser": "^2.26.0",
     "chai": "^4.2.0",
     "chai-as-promised": "^7.1.1",
     "codecov": "^3.6.5",
@@ -49,8 +62,11 @@
     "mocha": "^7.1.1",
     "nyc": "^15.0.0",
     "prettier": "^2.0.2",
+    "rollup": "^2.3.2",
+    "rollup-plugin-typescript2": "^0.27.0",
     "sharp": "^0.25.2",
-    "standard-version": "^7.1.0"
+    "standard-version": "^7.1.0",
+    "typescript": "^3.8.3"
   },
   "engines": {
     "node": ">=10.13.0"

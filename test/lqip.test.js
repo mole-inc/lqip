@@ -1,6 +1,6 @@
 const chai = require("chai");
 const chaiAsPromised = require("chai-as-promised");
-const lqip = require("../src/index");
+const lqip = require("../lib/index");
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;
