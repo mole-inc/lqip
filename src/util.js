@@ -27,8 +27,8 @@ const toPalette = (swatch) => {
       // discard falsy values
       .filter((key) => !!swatch[key])
       .map((key) => ({
-        popularity: swatch[key].getPopulation(),
-        hex: swatch[key].getHex(),
+        popularity: swatch[key].population,
+        hex: swatch[key].hex,
       }))
       // sort by least to most popular color
       .sort((a, b) => a.popularity <= b.popularity)
