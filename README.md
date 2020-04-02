@@ -10,7 +10,7 @@
 ## Installation
 
 ```
-npm install --save lqip
+npm install lqip
 ```
 
 ## Usage Example
@@ -28,31 +28,14 @@ lqip.base64(file).then(res => {
 
 ```
 
-Generating colour palette from an image:
-
-```js
-const lqip = require('lqip');
-
-const file = `./dest/to/file/riding-a-bike.jpg`;
-
-lqip.palette(file).then(res => {
-  // the response will be sorted from most dominant colour to least
-  console.log(res); //  [ '#628792', '#bed4d5', '#5d4340', '#ba454d', '#c5dce4', '#551f24' ] 
-});
-
-```
-
 ## API Documentation
 
-#### `lqip.base64(filePath: string)`
+#### `lqip.base64(source: string | Buffer, forceJimp: boolean)`
 
-This method accepts an image file path, the file has to be one of those formats ['jpeg', 'jpg', 'png'] and returns a Base64 
+This method accepts an image file path and Buffer, the file has to be one of those formats ['jpeg', 'jpg', 'png'] and returns a Base64. 
 image string with a valid format and ready to be used in web applications such as in <img /> tags source or in CSS properties URLs. 
 
-#### `lqip.palette(filePath: string)`
-
-This method accepts an image file path, and returns an colour palette as an array of HEX colour values. The array that is returned
-is sorted from the most to the least dominant colour.  
+forceJimp is `false` as default. When this is a falsy, use [sharp](https://sharp.pixelplumbing.com/) if installed.
 
 ## Inspired by
 
