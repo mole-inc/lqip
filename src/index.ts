@@ -7,36 +7,66 @@ import resize from "@jimp/plugin-resize";
 import { toBase64, isInstalled } from "./util";
 
 // supported images aka mimetypes
-const SUPPORTED_MIMES: Record<string, string> = {
-  jpeg: "image/jpeg",
-  jpg: "image/jpeg",
-  png: "image/png",
-};
+const SUPPORTED_MIMES: Map<string, string> = new Map([
+  ["jpeg", "image/jpeg"],
+  ["jpg", "image/jpeg"],
+  ["png", "image/png"],
+]);
 
-const base64 = async (
+export interface LqipOpitons {
+  width?: number;
+  forceJimp?: boolean;
+}
+export interface LqipResult {
+  content: Buffer;
+  metadata: {
+    originalWidth: number;
+    originalHeight: number;
+    width: number;
+    height: number;
+    type: string;
+    dataURIBase64: string;
+  };
+}
+
+export default async function lqip(
   source: string | Buffer,
-  forceJimp = false
-): Promise<string> => {
-  if (!forceJimp && isInstalled("sharp")) {
+  options?: LqipOpitons
+): Promise<LqipResult> {
+  const defaultOptions: LqipOpitons = {
+    width: 14,
+    forceJimp: false,
+  };
+  const config = Object.assign(Object.create(null), defaultOptions, options);
+
+  if (!config.forceJimp && isInstalled("sharp")) {
     const sharp = (await import("sharp")).default;
     const pipe = sharp(source);
-    const format =
-      (
-        await pipe.metadata().catch(() => {
-          throw new Error(
-            "Input file is missing or of an unsupported image format lqip"
-          );
-        })
-      ).format || "";
-    if (!SUPPORTED_MIMES[format]) {
+    const originalMetadata = await pipe.metadata();
+    const type = originalMetadata.format || "";
+
+    if (!type || !SUPPORTED_MIMES.get(type)) {
       throw new Error(
         "Input file is missing or of an unsupported image format lqip"
       );
     }
-    return pipe
-      .resize(14) // resize to 14px width and auto height
-      .toBuffer() // converts to buffer for Base64 conversion
-      .then((data) => toBase64(SUPPORTED_MIMES[format], data));
+
+    // see https://github.com/lovell/sharp/issues/808
+    const { data, info } = await pipe
+      .resize(config.width)
+      .toBuffer({ resolveWithObject: true });
+
+    return {
+      content: data,
+      metadata: {
+        originalWidth: originalMetadata.width || 0,
+        originalHeight: originalMetadata.height || 0,
+        width: info.width,
+        height: info.height,
+        type,
+        dataURIBase64: toBase64(SUPPORTED_MIMES.get(type) || "", data),
+      },
+    };
   }
 
   const jimp = configure({
@@ -47,32 +77,52 @@ const base64 = async (
     // get the extension of the chosen file
     const extension = path.extname(source).split(".").pop() || "";
     // supported files for now are ['jpg', 'jpeg', 'png']
-    if (!SUPPORTED_MIMES[extension]) {
+    if (!SUPPORTED_MIMES.get(extension)) {
       throw new Error(
         "Input file is missing or of an unsupported image format lqip"
       );
     }
-    return jimp
-      .read(source)
-      .then((image) => image.resize(10, jimp.AUTO))
-      .then(async (image) => {
-        const data = await image.getBufferAsync(
-          SUPPORTED_MIMES[image.getExtension()]
-        );
-        // valid image Base64 string, ready to go as src or CSS background
-        return toBase64(SUPPORTED_MIMES[image.getExtension()], data);
-      });
+    const image = await jimp.read(source);
+    const originalWidth = image.getWidth();
+    const originalHeight = image.getHeight();
+    const resizedImage = image.resize(config.width, jimp.AUTO);
+    const content = await resizedImage.getBufferAsync(
+      SUPPORTED_MIMES.get(image.getExtension()) || ""
+    );
+    return {
+      content,
+      metadata: {
+        originalWidth,
+        originalHeight,
+        width: resizedImage.getWidth(),
+        height: resizedImage.getHeight(),
+        type: image.getExtension(),
+        dataURIBase64: toBase64(
+          SUPPORTED_MIMES.get(image.getExtension()) || "",
+          content
+        ),
+      },
+    };
   }
-  return jimp
-    .read(source)
-    .then((image) => image.resize(10, jimp.AUTO))
-    .then(async (image) => {
-      const data = await image.getBufferAsync(
-        SUPPORTED_MIMES[image.getExtension()]
-      );
-      // valid image Base64 string, ready to go as src or CSS background
-      return toBase64(SUPPORTED_MIMES[image.getExtension()], data);
-    });
-};
-
-export default { base64 };
+  const image = await jimp.read(source);
+  const originalWidth = image.getWidth();
+  const originalHeight = image.getHeight();
+  const resizedImage = image.resize(config.width, jimp.AUTO);
+  const content = await resizedImage.getBufferAsync(
+    SUPPORTED_MIMES.get(image.getExtension()) || ""
+  );
+  return {
+    content,
+    metadata: {
+      originalWidth,
+      originalHeight,
+      width: resizedImage.getWidth(),
+      height: resizedImage.getHeight(),
+      type: image.getExtension(),
+      dataURIBase64: toBase64(
+        SUPPORTED_MIMES.get(image.getExtension()) || "",
+        content
+      ),
+    },
+  };
+}

@@ -18,24 +18,77 @@ npm install @mole-inc/lqip
 Generating Base64 from an image:
 
 ```js
-const lqip = require('lqip');
+import lqip from "@mole-inc/lqip"
 
 const file = `./dest/to/file/riding-a-bike.jpg`;
 
-lqip.base64(file).then(res => {
-  console.log(res); // "data:image/jpeg;base64,/9j/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhY.....
+const res = await lqip(file).catch(err => {
+  console.error(err);
 });
+console.log(res);
+// {
+//   content: Buffer...,
+//   metadata: {
+//     originalWidth: 1400,
+//     originalHeight: 700,
+//     width: 14,
+//     height: 7,
+//     type: "jpeg",
+//     dataURIBase64: "data:image/jpeg;base64,/9j/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhY.....",
+//   }
+// }
+//
+// e.g. `<img src="${res.metadata.dataURIBase64}" lazy-src="${file}" >`
 
+// or use `then`
+
+lqip(file).then(res => {
+  console.log(res);
+}).catch(err => {
+  console.error(err);
+});
 ```
 
 ## API Documentation
 
-#### `lqip.base64(source: string | Buffer, forceJimp: boolean)`
+### `lqip(source: string | Buffer, options?: LqipOpitons): Promise<LqipResult>`
 
-This method accepts an image file path and Buffer, the file has to be one of those formats ['jpeg', 'jpg', 'png'] and returns a Base64. 
-image string with a valid format and ready to be used in web applications such as in <img /> tags source or in CSS properties URLs. 
+default function
 
-forceJimp is `false` as default. When this is a falsy, use [sharp](https://sharp.pixelplumbing.com/) if installed.
+Name      | Description
+--------- | ---------------------------------------
+`source`  | Path to image file or `Buffer`
+`options` | LqipOpitons (optional)
+
+##### `LqipOpitons`
+
+```ts
+export interface LqipOpitons {
+  width?: number;
+  forceJimp?: boolean;
+}
+```
+
+Field       | Default       | Description
+----------- | ------------- | -------------------------------------------------------------------------------
+`width`     | 14            | resize width
+`forceJimp` | `false`       | When this is a falsy, use [sharp](https://sharp.pixelplumbing.com/) to resize if installed.
+
+#### `LqipResult`
+
+```ts
+export interface LqipResult {
+  content: Buffer;
+  metadata: {
+    originalWidth: number;
+    originalHeight: number;
+    width: number;
+    height: number;
+    type: string;
+    dataURIBase64: string;
+  };
+}
+```
 
 ## Inspired by
 
