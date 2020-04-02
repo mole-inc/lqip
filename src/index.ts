@@ -18,22 +18,26 @@ const SUPPORTED_MIMES: Record<string, string> = {
 const base64 = async (file: string | Buffer): Promise<string> => {
   if (isInstalled("sharp")) {
     const sharp = (await import("sharp")).default;
-    const sharpPipe = await sharp(file);
-    const format = (await sharpPipe.metadata()).format || "";
+    const pipe = sharp(file);
+    const format =
+      (
+        await pipe.metadata().catch(() => {
+          throw new Error(
+            "Input file is missing or of an unsupported image format lqip"
+          );
+        })
+      ).format || "";
     if (!SUPPORTED_MIMES[format]) {
       throw new Error(
         "Input file is missing or of an unsupported image format lqip"
       );
     }
-    sharpPipe
+    pipe
       .resize(14) // resize to 14px width and auto height
       .toBuffer() // converts to buffer for Base64 conversion
       .then((data) => {
-        if (data) {
-          // valid image Base64 string, ready to go as src or CSS background
-          return toBase64(SUPPORTED_MIMES[format], data);
-        }
-        throw new Error("Unhandled promise rejection in base64 promise");
+        // valid image Base64 string, ready to go as src or CSS background
+        return toBase64(SUPPORTED_MIMES[format], data);
       });
   }
 

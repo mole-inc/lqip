@@ -1,24 +1,22 @@
-const chai = require("chai");
-const Vibrant = require("node-vibrant");
-const { toPalette, toBase64 } = require("../lib/util");
-const expect = chai.expect;
+import Vibrant from "node-vibrant";
+import { toPalette, toBase64 } from "../src/util";
 
 describe("toBase64 utility function", () => {
   it("should return a properly formatted Base64 image string", () => {
-    const expected = "data:image/jpeg;base64,hello world";
-    let mockedMimeType = "image/jpeg";
-    let mockedBase64Data = "hello world";
-    expect(toBase64(mockedMimeType, mockedBase64Data)).to.equal(expected);
+    const expected = "data:image/jpeg;base64,aGVsbG8gd29ybGQ=";
+    const mockedMimeType = "image/jpeg";
+    const mockedBase64Data = Buffer.from("hello world");
+    expect(toBase64(mockedMimeType, mockedBase64Data)).toBe(expected);
   });
 });
 
 describe("toPalette utility function", () => {
-  let correctTestSwatch = null;
-  let testSwatchWithNull = null;
-  before((done) => {
+  let correctTestSwatch: any = null;
+  let testSwatchWithNull: any = null;
+  beforeAll((done) => {
     // we need a valid swatch object first!
     const file = `${__dirname}/img/riding-a-bike.jpg`;
-    let vibrant = new Vibrant(file, {
+    const vibrant = new Vibrant(file, {
       // no special options for now
     });
     vibrant.getPalette().then((palette) => {
@@ -30,10 +28,10 @@ describe("toPalette utility function", () => {
     });
   });
   it("should return 6 hex colours sorted by popularity", () => {
-    expect(toPalette(correctTestSwatch)).to.have.lengthOf(6);
+    expect(toPalette(correctTestSwatch)).toHaveLength(6);
   });
 
   it("should return 5 hex colours with no errors in a palette was less than 6", () => {
-    expect(toPalette(testSwatchWithNull)).to.have.lengthOf(5);
+    expect(toPalette(testSwatchWithNull)).toHaveLength(5);
   });
 });
