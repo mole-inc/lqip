@@ -36,7 +36,23 @@ const toPalette = (swatch) => {
   );
 };
 
+/**
+ * Checks if a node module is installed
+ *
+ * @param {string} name module name
+ * @returns {boolean}
+ */
+const isInstalled = (name) => {
+  try {
+    require.resolve(name);
+    return true;
+  } catch (e) {
+    return false;
+  }
+};
+
 module.exports = {
   toBase64,
   toPalette,
+  isInstalled,
 };
