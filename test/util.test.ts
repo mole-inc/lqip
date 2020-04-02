@@ -16,10 +16,7 @@ describe("toPalette utility function", () => {
   beforeAll((done) => {
     // we need a valid swatch object first!
     const file = `${__dirname}/img/riding-a-bike.jpg`;
-    const vibrant = new Vibrant(file, {
-      // no special options for now
-    });
-    vibrant.getPalette().then((palette) => {
+    Vibrant.from(file).getPalette().then((palette) => {
       correctTestSwatch = Object.assign({}, palette);
       // setting up a usecase
       testSwatchWithNull = Object.assign({}, palette);

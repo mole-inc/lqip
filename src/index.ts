@@ -7,6 +7,7 @@ import resize from "@jimp/plugin-resize";
 import { ImageSource } from "node-vibrant/lib/typing";
 
 import { toPalette, toBase64, isInstalled } from "./util";
+import { SharpImage } from "./SharpImage";
 
 // supported images aka mimetypes
 const SUPPORTED_MIMES: Record<string, string> = {
@@ -78,12 +79,13 @@ const base64 = async (file: string | Buffer): Promise<string> => {
 };
 
 const palette = async (file: ImageSource): Promise<string[]> => {
-  // vibrant library was about 10-15% slower than
-  // get-image-colors npm module but provided better
-  // and more needed information
-  const vibrant = new Vibrant(file, {
-    // no special options for now
-  });
+  if (isInstalled("sharp")) {
+    const vibrant = new Vibrant(file, {
+      ImageClass: SharpImage,
+    });
+    return vibrant.getPalette().then((palette) => toPalette(palette));
+  }
+  const vibrant = new Vibrant(file);
   return vibrant.getPalette().then((palette) => toPalette(palette));
 };
 
