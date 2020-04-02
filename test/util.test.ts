@@ -1,5 +1,5 @@
 import Vibrant from "node-vibrant";
-import { toPalette, toBase64 } from "../src/util";
+import { toPalette, toBase64, isInstalled } from "../src/util";
 
 describe("toBase64 utility function", () => {
   it("should return a properly formatted Base64 image string", () => {
@@ -28,10 +28,22 @@ describe("toPalette utility function", () => {
     });
   });
   it("should return 6 hex colours sorted by popularity", () => {
-    expect(toPalette(correctTestSwatch)).toHaveLength(6);
+    const actual = toPalette(correctTestSwatch);
+    expect(actual).toHaveLength(6);
+    expect(actual).toStrictEqual(["#628792", "#37465b", "#833640", "#bb454e", "#cfc1a4", "#c5dce4"]);
   });
 
   it("should return 5 hex colours with no errors in a palette was less than 6", () => {
     expect(toPalette(testSwatchWithNull)).toHaveLength(5);
+  });
+});
+
+describe("isInstalled utility function", () => {
+  it("should return false when module is not installed", () => {
+    expect(isInstalled("NOT_EXIST")).toBeFalsy();
+  });
+
+  it("should return true when module is installed", () => {
+    expect(isInstalled("jest")).toBeTruthy();
   });
 });
