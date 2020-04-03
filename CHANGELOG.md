@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.0.0](https://github.com/mole-inc/lqip/compare/v4.0.0...v5.0.0) (2020-04-03)
+
+
+### ⚠ BREAKING CHANGES
+
+* rewrite API
+
+### Features
+
+* rewrite API ([7af5cfb](https://github.com/mole-inc/lqip/commit/7af5cfb0dec85169290166a9e3df494b94aa529e))
+
 ## [4.0.0](https://github.com/mole-inc/lqip/compare/v3.1.1...v4.0.0) (2020-04-02)
 
 
